@@ -1,2 +1,26 @@
 ---
 # tasks file for ansible-role-openshift4-cis
+- name: 1. Control Plane Components
+  include_tasks: 01-control_plane_components.yaml
+  tags:
+    - "1"
+
+- name: 2. etcd
+  include_tasks: 02-etcd.yaml
+  tags:
+    - "2"
+
+- name: 3. Control Plane Configuration
+  include_tasks: 03-control_plane_configuration.yaml
+  tags:
+    - "3"
+
+- name: 4. Worker Nodes
+  include_tasks: 04-worker_nodes.yaml
+  tags:
+    - "4"
+
+- name: 5. Policies
+  include_tasks: 05-policies.yaml
+  tags:
+    - "5"
