@@ -1,7 +1,7 @@
 ansible-role-openshift4-cis
 =========
 
-Based on [CIS Kubernetes Benchmark v1.5.1.](docs/CIS_Kubernetes_Benchmark_v1.5.1.pdf).
+Based on [CIS Kubernetes Benchmark v1.5.1.](docs/CIS_Kubernetes_Benchmark_v1.5.1.pdf)
 
 Requirements
 ------------
@@ -13,6 +13,9 @@ Role Variables
 
 * `scored`
 * `not_scored`
+* `level_1`
+* `level_2`
+* `path_to_cni_files`
 
 Dependencies
 ------------
