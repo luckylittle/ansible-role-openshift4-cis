@@ -518,3 +518,5 @@
     - "1"
     - "scored"
     - "level_1"
+
+# when: inventory_hostname in groups['masters']

@@ -54,3 +54,5 @@
     - "2"
     - "not_scored"
     - "level_2"
+
+# when: inventory_hostname in groups['etcd']
