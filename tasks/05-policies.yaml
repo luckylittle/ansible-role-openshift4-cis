@@ -1,3 +1,4 @@
+---
 - name: 5.1.1 | Ensure that the cluster-admin role is only used where required (Not Scored)
   tags:
     - ""
