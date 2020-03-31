@@ -3,7 +3,7 @@
   shell: ps -ef | grep etcd
   # --cert-file and the --key-file arguments are set as appropriate
   tags:
-    - "2"
+    - "2.1"
     - "scored"
     - "level_1"
 
@@ -11,7 +11,7 @@
   shell: ps -ef | grep etcd
   # --client-cert-auth argument is set to true
   tags:
-    - "2"
+    - "2.2"
     - "scored"
     - "level_1"
 
@@ -19,7 +19,7 @@
   shell: "ps -ef | grep etcd"
   # --auto-tls argument exists, it is not set to true, e.g. --auto-tls=false
   tags:
-    - "2"
+    - "2.3"
     - "scored"
     - "level_1"
 
@@ -27,7 +27,7 @@
   shell: "ps -ef | grep etcd"
   # --peer-cert-file and --peer-key-file arguments are set as appropriate
   tags:
-    - "2"
+    - "2.4"
     - "scored"
     - "level_1"
 
@@ -35,7 +35,7 @@
   shell: "ps -ef | grep etcd"
   # --peer-client-cert-auth argument is set to true
   tags:
-    - "2"
+    - "2.5"
     - "scored"
     - "level_1"
 
@@ -43,7 +43,7 @@
   shell: "ps -ef | grep etcd"
   # --peer-auto-tls argument exists, it is not set to true, e.g. --peer-auto-tls=false
   tags:
-    - "2"
+    - "2.6"
     - "scored"
     - "level_1"
 
@@ -51,8 +51,6 @@
   shell: "ps -ef | grep etcd"
   # file referenced by the --client-ca-file for apiserver is different from the --trusted-ca-file used by etcd
   tags:
-    - "2"
+    - "2.7"
     - "not_scored"
     - "level_2"
-
-# when: inventory_hostname in groups['etcd']

@@ -1,0 +1,21 @@
+---
+
+- name: 0.1 | Gathering Information from masters
+  block:
+    - name: 0.1.1 |
+  when: inventory_hostname in groups['masters']
+
+- name: 0.2 | Gathering Information from etcd
+  block:
+    - name: 0.2.1 |
+  when: inventory_hostname in groups['etcd']
+
+- name: 0.3 | Gathering Information from workers
+  block:
+    - name: 0.3.1 |
+  when: inventory_hostname in groups['workers']
+
+- name: 0.4 | Gathering Information using kubectl
+  block:
+    - name: 0.4.1 |
+  when: inventory_hostname in groups['localhost']

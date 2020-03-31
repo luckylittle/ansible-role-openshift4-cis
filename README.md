@@ -1,12 +1,12 @@
 WIP -- ansible-role-openshift4-cis
 =========
 
-Based on [CIS Kubernetes Benchmark v1.5.1.](docs/CIS_Kubernetes_Benchmark_v1.5.1.pdf) [14 Feb 2020]
+Based on [CIS Kubernetes Benchmark v1.5.1](docs/CIS_Kubernetes_Benchmark_v1.5.1.pdf) [14 Feb 2020].
 
 Requirements
 ------------
 
-Tested on ansible `2.9.4`
+Tested on ansible `2.9.4`. It also requires `kubectl` for the category `5` tasks.
 
 Role Variables
 --------------
@@ -30,18 +30,43 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
+* `requirements.yml`:
+
 ```yaml
-- hosts: localhost
+- src: https://github.com/luckylittle/ansible-role-openshift4-cis
+  version: master
+```
+
+* `playbook.yaml`:
+
+```yaml
+- hosts: all
+  remote_user: core
   roles:
     - ansible-role-openshift4-cis
 ```
 
-The inventory must contain specific host groups, that the role relies on:
+* Execution:
 
-```plain
+```bash
+ansible-galaxy install --force -r requirements.yml -p roles/
+ansible-playbook -i inventory
+```
+
+The `inventory` must contain specific host groups, that the role relies on:
+
+```ini
+[localhost]
+localhost
+
+[masters]
+master[0:2]
+
+[etcd:children]
 masters
-etcd
-workers
+
+[workers]
+worker[0:4]
 ```
 
 License
