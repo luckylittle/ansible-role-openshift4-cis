@@ -1,95 +1,218 @@
+---
+  # RBAC and Service Accounts
+
 - name: 5.1.1 | Ensure that the cluster-admin role is only used where required (Not Scored)
+  shell: "kubectl get clusterrolebindings -o=custom-columns=NAME:.metadata.name,ROLE:.roleRef.name,SUBJECT:.subjects[*].name"
+  # Review each principal listed and ensure that cluster-admin privilege is required for it
   tags:
-    - ""
+    - "5.1.1"
+    - "not_scored"
+    - "level_1"
 
 - name: 5.1.2 | Minimize access to secrets (Not Scored)
+  shell: "echo 'Review the users who have get , list or watch access to secrets objects in the Kubernetes API.'"
   tags:
-    - ""
+    - "5.1.2"
+    - "not_scored"
+    - "level_1"
 
-- name: 5.1.3 | Minimize wildcard use in Roles and ClusterRoles (Not Scored)
+- name: 5.1.3 (a) | Minimize wildcard use in Roles and ClusterRoles (Not Scored)
+  shell: "kubectl get roles --all-namespaces -o yaml"
+  # review for wildcards
   tags:
-    - ""
+    - "5.1.3"
+    - "not_scored"
+    - "level_1"
+
+- name: 5.1.3 (b) | Minimize wildcard use in Roles and ClusterRoles (Not Scored)
+  shell: "kubectl get clusterroles -o yaml"
+  # review for wildcards
+  tags:
+    - "5.1.3"
+    - "not_scored"
+    - "level_1"
 
 - name: 5.1.4 | Minimize access to create pods (Not Scored)
+  shell: "echo 'remove create access to pod objects in the cluster'"
   tags:
-    - ""
+    - "5.1.4"
+    - "not_scored"
+    - "level_1"
 
 - name: 5.1.5 | Ensure that default service accounts are not actively used. (Scored)
+  # For each namespace in the cluster, review the rights assigned to the default service account
+  # and ensure that it has no roles or cluster roles bound to it apart from the defaults.
+  # Additionally ensure that the automountServiceAccountToken: false setting is in place for
+  # each default service account.
   tags:
-    - ""
+    - "5.1.5"
+    - "scored"
+    - "level_1"
 
 - name: 5.1.6 | Ensure that Service Account Tokens are only mounted where necessary (Not Scored)
+  # Review pod and service account objects in the cluster and ensure that the option below is set:
+  # automountServiceAccountToken: false
   tags:
-    - ""
+    - "5.1.6"
+    - "not_scored"
+    - "level_1"
+
+  # Pod Security Policies
 
 - name: 5.2.1 | Minimize the admission of privileged containers (Not Scored)
+  shell: "kubectl get psp"
+  # kubectl get psp <name> -o=jsonpath='{.spec.privileged}'
+  # securityContext.privileged flag not set to true
   tags:
-    - ""
+    - "5.2.1"
+    - "not_scored"
+    - "level_1"
 
 - name: 5.2.2 | Minimize the admission of containers wishing to share the host process ID namespace (Scored)
+  shell: "kubectl get psp"
+  # "kubectl get psp <name> -o=jsonpath='{.spec.hostPID}'"
+  # hostPID flag not set to true
   tags:
-    - ""
+    - "5.2.2"
+    - "scored"
+    - "level_1"
 
 - name: 5.2.3 | Minimize the admission of containers wishing to share the host IPC namespace (Scored)
+  shell: "kubectl get psp"
+  # kubectl get psp <name> -o=jsonpath='{.spec.hostIPC}'
+  # hostIPC flag not set to true
   tags:
-    - ""
+    - "5.2.3"
+    - "scored"
+    - "level_1"
 
 - name: 5.2.4 | Minimize the admission of containers wishing to share the host network namespace (Scored)
+  shell: "kubectl get psp"
+  # kubectl get psp <name> -o=jsonpath='{.spec.hostNetwork}'
+  # hostNetwork flag not set to true
   tags:
-    - ""
+    - "5.2.4"
+    - "scored"
+    - "level_1"
 
 - name: 5.2.5 | Minimize the admission of containers with allowPrivilegeEscalation (Scored)
+  shell: "kubectl get psp"
+  # kubectl get psp <name> -o=jsonpath='{.spec.allowPrivilegeEscalation}'
+  # allowPrivilegeEscalation flag not set to true
   tags:
-    - ""
+    - "5.2.5"
+    - "scored"
+    - "level_1"
 
 - name: 5.2.6 | Minimize the admission of root containers (Not Scored)
+  # kubectl get psp
+  # kubectl get psp <name> -o=jsonpath='{.spec.runAsUser.rule}'
+  # at least one PSP which returns MustRunAsNonRoot or MustRunAs with the range of UIDs not including 0
   tags:
-    - ""
+    - "5.2.6"
+    - "not_scored"
+    - "level_2"
 
 - name: 5.2.7 | Minimize the admission of containers with the NET_RAW capability (Not Scored)
+  shell: "kubectl get psp"
+  # kubectl get psp <name> -o=jsonpath='{.spec.requiredDropCapabilities}'
+  # check whether NET_RAW is disabled (at least one PSP which returns NET_RAW or ALL)
   tags:
-    - ""
+    - "5.2.7"
+    - "not_scored"
+    - "level_1"
 
 - name: 5.2.8 | Minimize the admission of containers with added capabilities (Not Scored)
+  shell: "kubectl get psp"
+  # Verify that there are no PSPs present which have allowedCapabilities set to anything other than an empty array
   tags:
-    - ""
+    - "5.2.8"
+    - "not_scored"
+    - "level_1"
 
 - name: 5.2.9 | Minimize the admission of containers with capabilities assigned (Not Scored)
+  shell: "kubectl get psp"
+  # kubectl get psp <name> -o=jsonpath='{.spec.requiredDropCapabilities}'
+  # capabilities have been forbidden for all PSPs
   tags:
-    - ""
+    - "5.2.9"
+    - "not_scored"
+    - "level_2"
+
+  # Network Policies and CNI
 
 - name: 5.3.1 | Ensure that the CNI in use supports Network Policies (Not Scored)
+  shell: "echo 'Review the documentation of CNI plugin in use by the cluster, and confirm that it supports Ingress and Egress network policies'"
   tags:
-    - ""
+    - "5.3.1"
+    - "not_scored"
+    - "level_1"
 
 - name: 5.3.2 | Ensure that all Namespaces have Network Policies defined (Scored)
+  shell: "kubectl --all-namespaces get networkpolicy"
+  # Ensure that each namespace defined in the cluster has at least one Network Policy.
   tags:
-    - ""
+    - "5.3.2"
+    - "scored"
+    - "level_2"
+
+  # Secrets Management
 
 - name: 5.4.1 | Prefer using secrets as files over secrets as environment variables (Not Scored)
+  shell: "kubectl get all -o jsonpath='{range .items[?(@..secretKeyRef)]} {.kind} {.metadata.name} {"\n"}{end}' -A"
+  # find references to objects which use environment variables defined from secrets
   tags:
-    - ""
+    - "5.4.1"
+    - "not_scored"
+    - "level_1"
 
 - name: 5.4.2 | Consider external secret storage (Not Scored)
+  shell: "echo 'Consider the use of an external secrets storage and management system, instead of using Kubernetes Secrets directly, if you have more complex secret management needs'"
   tags:
-    - ""
+    - "5.4.2"
+    - "not_scored"
+    - "level_2"
+
+  # Extensible Admission Control
 
 - name: 5.5.1 | Configure Image Provenance using ImagePolicyWebhook admission controller (Not Scored)
+  # configure such rules to ensure that only approved images are deployed in the cluster
+  # look for allowedRegistriesForImport in image.config.openshift.io/cluster
   tags:
-    - ""
+    - "5.5.1"
+    - "not_scored"
+    - "level_2"
+
+  # General Policies
 
 - name: 5.7.1 | Create administrative boundaries between resources using namespaces (Not Scored)
+  shell: "kubectl get namespaces"
+  # Ensure that these namespaces are the ones you need and are adequately administered
   tags:
-    - ""
+    - "5.7.1"
+    - "not_scored"
+    - "level_1"
 
 - name: 5.7.2 | Ensure that the seccomp profile is set to docker/default in your pod definitions (Not Scored)
+  # review the pod definitions, they should all have this metadata:
+  # annotations:
+  #   seccomp.security.alpha.kubernetes.io/pod: docker/default
   tags:
-    - ""
+    - "5.7.2"
+    - "not_scored"
+    - "level_2"
 
 - name: 5.7.3 | Apply Security Context to Your Pods and Containers (Not Scored)
+  # Review the pod definitions in your cluster and verify that you have security contexts defined as appropriate.
   tags:
-    - ""
+    - "5.7.3"
+    - "not_scored"
+    - "level_2"
 
 - name: 5.7.4 | The default namespace should not be used (Scored)
+  shell: "kubectl get all -n default"
+  # The only entries there should be system managed resources such as the kubernetes service
   tags:
-    - ""
+    - "5.7.4"
+    - "scored"
+    - "level_2"
